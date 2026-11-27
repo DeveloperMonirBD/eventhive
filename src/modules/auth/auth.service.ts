@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import config from '../../config/env';
 import AppError from '../../utils/AppError';
-import type { ISignupPayload } from './auth.interface';
+import type { IAuthResponse, ILoginPayload, ISignupPayload } from './auth.interface';
 import { authRepository } from './auth.repository';
 
 const signup = async (payload: ISignupPayload) => {
@@ -26,7 +28,48 @@ const signup = async (payload: ISignupPayload) => {
     return userWithoutPassword;
 };
 
+const login = async (payload: ILoginPayload) => {
+    // Find user by email
+    const user = await authRepository.findUserByEmail(payload.email);
+
+    if (!user) {
+        throw new AppError(401, 'Invalid email or password');
+    }
+
+    // Compare password
+    const isPasswordMatched = await bcrypt.compare(payload.password, user.password);
+
+    if (!isPasswordMatched) {
+        throw new AppError(401, 'Invalid email or password');
+    }
+
+    const jwtPayload = {
+        id: user.id,
+        role: user.role
+    };
+
+    const jwtExpiresIn = {
+        expiresIn: config.jwt_expires_in as NonNullable<jwt.SignOptions['expiresIn']>
+    };
+
+    // Generate access token
+    const token = jwt.sign(jwtPayload, config.jwt_secret, jwtExpiresIn);
+
+    // Prepare user information
+    const userInfo: IAuthResponse = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    };
+
+    return {
+        token,
+        user: userInfo
+    };
+};
 
 export const authService = {
-    signup
+    signup,
+    login
 };
