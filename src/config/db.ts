@@ -8,16 +8,6 @@ export const pool = new Pool({
 export const initDB = async () => {
     try {
         // 1. Users Table
-        // 2. Events Table
-        // 3. Bookings Table
-
-        // 4. Updated At Trigger Function
-
-        // 5. Users Trigger
-        // 6. Events Trigger
-        // 7. Bookings Trigger
-
-        // 1. Users Table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
