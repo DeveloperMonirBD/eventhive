@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import type { Application, Request, Response } from 'express';
 import express from 'express';
+import globalErrorHandler from './middleware/globalErrorHandler';
 
 const app: Application = express();
 
@@ -20,7 +21,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
 
-
+// 404 handler
 app.use((req: Request, res: Response) => {
     res.status(404).json({
         success: false,
@@ -28,6 +29,8 @@ app.use((req: Request, res: Response) => {
     });
 });
 
+// Global Error Handler
+app.use(globalErrorHandler);
 
 
 export default app;
