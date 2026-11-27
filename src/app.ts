@@ -4,6 +4,7 @@ import type { Application, Request, Response } from 'express';
 import express from 'express';
 import globalErrorHandler from './middleware/globalErrorHandler';
 import { authRoute } from './modules/auth/auth.route';
+import { eventRoute } from './modules/event/event.route';
 
 const app: Application = express();
 
@@ -23,6 +24,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/v1/auth', authRoute);
+app.use('/api/v1/events', eventRoute);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
