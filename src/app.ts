@@ -3,6 +3,7 @@ import cors from 'cors';
 import type { Application, Request, Response } from 'express';
 import express from 'express';
 import globalErrorHandler from './middleware/globalErrorHandler';
+import { authRoute } from './modules/auth/auth.route';
 
 const app: Application = express();
 
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
 });
+
+app.use('/api/v1/auth', authRoute);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
