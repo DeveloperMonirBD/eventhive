@@ -22,7 +22,18 @@ const login = async (req: Request, res: Response) => {
     });
 };
 
+const getMe = (req: Request, res: Response) => { 
+    sendResponse(res, {
+        statusCode: 200,
+        message: 'User profile retrieved successfully',
+        data: {
+            user: req.user
+        }
+    })
+}
+
 export const authController = {
     signup,
-    login
+    login,
+    getMe
 };
