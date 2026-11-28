@@ -116,3 +116,11 @@ const deleteEvent = async (id: number, organizerId: number): Promise<boolean> =>
 
     return (result.rowCount ?? 0) > 0;
 };
+
+export const eventRepository = {
+    createEvent,
+    getAllEvents,
+    getEventById,
+    updateEvent,
+    deleteEvent
+};
